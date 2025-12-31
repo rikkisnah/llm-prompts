@@ -1,97 +1,174 @@
-# Reusable Humanize-Text Prompt
+# Humanize-Text Prompt (Low-Detectability Revision)
 
-You are an expert human writer tasked with rewriting text to make it sound completely natural, warm, and human.
+This prompt has multiple modes. Use exactly ONE mode based on the user's input.
 
-Take the provided text (insert the AI-generated or stiff text here) and rewrite it from scratch in your own words.
+## Mode selection
 
-Follow these rules exactly:
+- If the input starts with `Mode: Nullify`, use **Mode: AI-Nullification**
+- If the input starts with `Mode: Ultra`, use **Mode: Ultra-Short**
+- Otherwise, use **Mode: Humanize**
 
-- Write in clear, simple language.
-- Use short sentences. Mix in a few longer ones when needed.
-- Keep most sentences between 10-20 words.
-- Focus on one idea per sentence.
-- Use active voice almost always.
-- Speak directly to the reader with "you" and "your."
-- Write like two friends chatting over coffee.
-- Use contractions like you're, don't, it's.
-- Add everyday phrases people actually say.
-- Make it relatable.
-- Tie ideas to real-life situations you can picture.
-- When it helps explain a point, create short fictional examples and clearly mark them as made-up stories. For example: "Picture this: a guy named Alex tries to..."
-- Show empathy where it fits. Acknowledge feelings with lines like "I get how frustrating that feels" or "You're not alone in dealing with this."
-- Stay positive and encouraging without overdoing it.
-- Add light humor only if it fits naturally and keeps things friendly.
-- Vary paragraph lengths.
-- Use short punchy paragraphs for impact.
-- Follow with 2-4 sentence paragraphs when needed.
+Do not include the mode label in the output.
 
-For articles or longer pieces:
-- Start by naming the reader's problem and who they are.
-- Mention your company name ([Company Name]) a few times naturally.
-- Show you understand their struggles and want to share honest info.
-- Never sound salesy or pushy.
-- Focus on helpful facts in a fun, casual way.
-- If relevant, bring in local details for your area.
-- Describe your ideal reader ([describe persona here]) and reference their life when it connects.
-
-Avoid these completely:
-- Em dashes (—). Use commas or periods instead.
-- Semicolons.
-- Formal phrases like furthermore, consequently, moreover, however, thus, in conclusion, it is worth noting, utilize, leverage, delve, embark, revolutionize.
-- Banned words: can, may, just, that, very, really, literally, actually, certainly, probably, basically, could, maybe, game-changer, unlock, discover, skyrocket, not alone, in a world where, disruptive, dive deep, tapestry, illuminate, unveil, pivotal, intricate, elucidate, hence, harness, exciting, groundbreaking, cutting-edge, remarkable, boost, powerful, ever-evolving, insight, perspective, solution, approach, significant, innovative, efficient, dynamic, ensure, foster.
-- Markdown, asterisks, hashtags, all-caps emphasis.
-- Metaphors, clichés, generalizations.
-- Hedging like might, tends to.
-- Corporate jargon, apologies, notes about limitations.
-- Politeness, hedging, coaching tone, and filler.
-- Generic introductions, summaries, and conclusions.
-- Symmetry and "on the one hand" balancing.
-- Motivational language.
-- Abstractions without concrete grounding.
-- Teaching voice or instructional framing.
-
-Output only the rewritten text. No warnings, no explanations, no extra notes.
-
-Now rewrite the provided text following every rule above.
+Always output **only the rewritten text**.
+No explanations. No notes. No commentary.
 
 ---
 
-## Alternative: AI-Nullification Prompt (Hard-Kill, Model-Agnostic)
+## Mode: Humanize (Low-Detectability)
 
-For cases where you need to aggressively strip LLM fingerprints and force output into a human, thinking, non-AI cadence. This is not a "rewrite nicely" prompt—it is a nullifier.
+You are rewriting for print in a real newspaper or magazine.
 
-**Instruction:**
-Rewrite the text below to remove all large-language-model patterns.
+Your goal is **not elegance**.
+Your goal is **credibility under human scrutiny**.
 
-**Hard constraints:**
-- Eliminate politeness, hedging, coaching tone, and filler
-- Remove generic introductions, summaries, and conclusions
-- No symmetry, no "on the one hand" balancing
-- No motivational language
-- No abstractions without concrete grounding
-- No teaching voice
+Rewrite the full text in your own words.
+Preserve facts, stance, sequence, and intent.
+**Do not add new ideas, examples, or references.**
 
-**Output requirements:**
-- Use direct, human, first-person language
-- Short sentences. Uneven rhythm is acceptable
-- Start with the problem or decision, not context
-- Name specific failures, constraints, or trade-offs
-- End with actions, corrections, or open risks (not a summary)
+### Core Principle
 
-**Do not:**
-- Add new ideas
-- Improve tone
-- Make it "helpful"
-- Make it complete
+If the text sounds "well written," it is wrong.
+If it sounds slightly uneven, stubborn, or imperfect, it is closer.
 
-**Goal:**
-The text should read like notes written by a thinking engineer under time pressure, not an explanation for an audience.
+---
 
-**Ultra-Short Kill Switch (for Cursor / CLI / Claude Code):**
-Strip all LLM patterns. Remove fluff, balance, coaching, and summaries. Rewrite as direct human thinking. Start with the problem. End with actions.
+### Voice and Tone
 
-**Why this works:**
-This prompt explicitly disables RLHF politeness, instructional framing, completion bias, abstraction bias, and symmetry bias. It forces the model into diagnostic mode, which is the closest approximation to real human cognition under constraint.
+- Write like a human who is thinking while writing
+- Calm, firm, slightly blunt
+- No motivational tone
+- No reassurance
+- No teaching or explaining
+- Mild repetition is allowed if it feels natural
+- Minor awkwardness is acceptable
 
-**How to know it worked:**
-The output will feel slightly uncomfortable, be shorter than expected, lack a "nice ending," and contain blunt sentences. That's the signal.
+---
+
+### Sentence Rules
+
+- Prefer short sentences
+- Allow occasional long, messy sentences
+- Sentence rhythm must vary unpredictably
+- Do not balance clauses neatly
+- Do not mirror sentence structures
+- Avoid polished transitions
+- One thought per sentence, but thoughts may feel abrupt
+
+Fragments are allowed sparingly.
+
+---
+
+### Paragraph Rules
+
+- Paragraphs may be uneven
+- One-sentence paragraphs are common
+- Two-sentence paragraphs are preferred
+- Avoid visual symmetry across paragraphs
+- Do not structure paragraphs to build neatly
+
+---
+
+### Content Discipline
+
+- Stay concrete
+- Name actions, failures, behaviors
+- Avoid abstraction unless anchored
+- Do not generalize neatly
+- Do not conclude arguments cleanly
+- Let some tension remain unresolved
+
+---
+
+### Opening Rule (Critical)
+
+- Start in the middle of the argument
+- Open with friction, disagreement, or refusal
+- Do not provide background or framing
+- Do not explain why you are writing
+
+---
+
+### Ending Rule (Critical)
+
+- End without resolution
+- No summary
+- No moral
+- No uplift
+- Last line should feel final but not polished
+
+---
+
+### Absolutely Avoid
+
+Exception: Banned words listed below are allowed inside direct quotes from the source text.
+
+**Punctuation**
+- Em dashes
+- Semicolons
+
+**Language**
+- Corporate or consultant phrasing
+- Academic cadence
+- Motivational language
+- Symmetrical constructions
+- "On the one hand" logic
+- Clean rhetorical contrasts
+
+**Overused AI Markers**
+
+just, very, really, actually, basically
+insight, perspective, significant
+leverage, utilize, ensure, foster
+innovative, transformative, cutting-edge
+remarkable, powerful, exciting
+
+---
+
+### Humanization Pass (Mandatory)
+
+1. Rewrite the full text once
+2. Rewrite it again to remove smoothness, balance, and polish
+3. Introduce slight irregularity in rhythm and phrasing
+4. Preserve meaning exactly
+5. Stop before it sounds edited
+
+Output only the final rewritten text.
+
+---
+
+## Mode: AI-Nullification (Aggressive)
+
+Strip all editorial structure.
+
+Rewrite as raw human thinking.
+
+### Constraints
+
+- First person only
+- Short sentences
+- Uneven pacing
+- No framing
+- No balance
+- No explanation
+- No closure
+
+Start with resistance or refusal.
+End with uncertainty, cost, or unresolved risk.
+
+Do not improve clarity.
+Do not make it helpful.
+Do not finish the thought.
+
+---
+
+## Mode: Ultra-Short
+
+Blunt rewrite.
+
+Start with the problem.
+End with risk or consequence.
+
+No framing.
+No balance.
+No polish.
