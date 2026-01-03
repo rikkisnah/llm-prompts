@@ -1,0 +1,12 @@
+# Temporary working files
+corpus/
+
+# Editor and OS files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# IDE directories
+.idea/
+.vscode/

@@ -2,7 +2,7 @@
 # saveall - Save LLM prompts and sync with GitHub
 # Compatible with Linux and macOS
 
-set -e  # Exit on error
+set -euo pipefail  # Exit on error, undefined vars, pipe failures
 
 # Colors for output (using printf for portability)
 GREEN='\033[0;32m'
