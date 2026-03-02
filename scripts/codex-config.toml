@@ -1,0 +1,10 @@
+# DANGEROUS: disables all approval prompts for this repo
+approval_policy = "never"
+
+# Pick how much access you want while commands run:
+# "workspace-write" = can edit/run in the repo workspace; protected paths like .git/.codex remain read-only
+sandbox_mode = "workspace-write"
+
+# Optional: allow network during execution in workspace-write
+[sandbox_workspace_write]
+network_access = true
