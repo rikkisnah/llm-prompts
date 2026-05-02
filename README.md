@@ -1,43 +1,52 @@
 # llm-prompts
 
-A library of LLM prompts for various tasks.
+Personal library of LLM prompts and skills for writing documentation.
 
-## Structure
+## Purpose
+
+Reusable prompts for drafting and editing the kinds of documents I write often:
+
+- Summaries
+- Design docs
+- Articles
+- LinkedIn posts
+- Online newspaper / blog posts
+
+When a prompt earns its keep, it gets promoted into a reusable **skill** under `skills/` so it can be invoked directly from Claude Code or Codex CLI.
+
+## Layout
 
 ```
-prompts/
-├── roles/       # Persona prompts (e.g., runbook-author, go-cli-developer)
-├── tasks/       # Task-specific prompts (analysis, coding, writing)
-└── templates/   # Reusable scaffolds (runbook, incident-analysis)
-projects/        # Project-specific prompt collections
-corpus/          # Temporary working files (gitignored)
-scripts/         # CLI tooling
+prompts/   Markdown prompts (UPPER-KEBAB-CASE filenames, e.g. CREATE-PR.md)
+skills/    Prompts promoted to Claude Code / Codex skills
+scripts/   Helper scripts and example tool configs
 ```
 
-## Usage
+## Prompt format
 
-```bash
-# Pull latest changes
-./getall.sh
-
-# Commit and push changes
-./saveall.sh
-```
-
-## Prompt Format
-
-Prompts use Markdown with YAML frontmatter:
+Markdown with optional YAML frontmatter:
 
 ```markdown
 ---
-tags: [coding, review]
+tags: [writing, summary]
 ---
 # Prompt Title
 
 Prompt content here...
 ```
 
-## Agent Configuration
+## Sync
 
-- **CLAUDE.md** - Primary instructions for Claude Code
-- **AGENTS.md** - Instructions for Codex CLI (references CLAUDE.md)
+```bash
+./getall.sh    # pull latest, auto-stash local edits
+./saveall.sh   # stage, commit with timestamped message, rebase, push
+```
+
+## Agent configuration
+
+- `CLAUDE.md` — instructions for Claude Code
+- `AGENTS.md` — symlink to `CLAUDE.md` so Codex CLI reads the same content
+
+## License
+
+[MIT](LICENSE)
