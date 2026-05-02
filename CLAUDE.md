@@ -32,7 +32,7 @@ This repository stores LLM prompts and related materials.
   ---
   # Prompt Title
   ```
-- Use kebab-case filenames (e.g., `runbook-author.md`).
+- Prompt filenames use UPPER-KEBAB-CASE (e.g., `CREATE-PR.md`, `RUNBOOK-AUTHOR.md`). Other Markdown files (READMEs, docs) stay lowercase kebab-case.
 - Templates use `{{PLACEHOLDER}}` tokens; keep placeholders uppercase and descriptive.
 - Prefer `-` for lists and consistent heading levels.
 
