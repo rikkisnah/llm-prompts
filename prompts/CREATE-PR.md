@@ -3,7 +3,7 @@ tags: [git, workflow, pr]
 ---
 # Create PR
 
-Commit the current working changes, push the branch, and open a pull request with a clear description.
+Commit the current working changes, push the branch, and open a pull request with a clear description. For solo repos with no branch protection, use `PUSH-MAIN.md` instead.
 
 ## Steps
 
