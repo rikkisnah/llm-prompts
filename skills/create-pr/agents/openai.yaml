@@ -1,0 +1,5 @@
+#ai-assisted with OCA/OpenAI Model with human supervision
+interface:
+  display_name: "Create PR"
+  short_description: "Local branch, commit, and PR text"
+  default_prompt: "Use $create-pr to inspect current changes, select or create the local branch, commit locally, and show a PR description without pushing."

@@ -1,0 +1,42 @@
+$DISCLOSURE
+
+SHELL := /bin/bash
+
+.DEFAULT_GOAL := help
+
+.PHONY: help setup format test test-% lint score score-gate check validate clean clean-env
+
+help:
+	@printf '%s\n' 'Targets: setup format test test-NAME lint score score-gate check validate clean clean-env'
+
+setup:
+	@if [ -f go.mod ]; then go mod download; else echo 'No go.mod found; setup skipped.'; fi
+
+format:
+	@if command -v gofmt >/dev/null 2>&1; then gofmt -w $$(find . -name '*.go' -not -path './.git/*'); else echo 'gofmt missing.'; exit 1; fi
+
+test:
+	@if [ -f go.mod ]; then go test ./...; else echo 'No go.mod found; Go tests skipped.'; fi
+
+test-%:
+	@if [ -f go.mod ]; then go test ./... -run "$*"; else echo 'No go.mod found.'; exit 2; fi
+
+lint:
+	@if [ -f go.mod ]; then go vet ./...; fi
+	@if command -v golangci-lint >/dev/null 2>&1; then golangci-lint run; else echo 'golangci-lint missing; install it for standard/strict maturity.'; fi
+
+score:
+	python3 scripts/score_architecture.py
+
+score-gate:
+	python3 scripts/score_architecture.py --min-score 10
+
+check: lint test
+
+validate: check score-gate
+
+clean:
+	rm -rf coverage.out dist build tmp .cache
+
+clean-env:
+	go clean -cache -testcache

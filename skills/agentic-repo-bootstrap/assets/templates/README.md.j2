@@ -1,0 +1,58 @@
+$DISCLOSURE_MD
+
+# $PROJECT_NAME
+
+## Purpose
+
+This repository is configured for agentic engineering with local-first validation, clean-code guidance, scorecard gates, durable non-secret memory, and explicit workflow docs.
+
+## Quick Start
+
+```bash
+make setup
+make validate
+```
+
+## Common Commands
+
+```bash
+make setup
+make format
+make test
+make lint
+make score
+make score-gate
+make check
+make validate
+make clean
+```
+
+## Validation
+
+`make validate` is the full local gate. It runs linting, tests, and the architecture score gate.
+
+`make score` prints the governance scorecard. `make score-gate` fails unless every enabled scorecard dimension is 10/10.
+
+## Agentic Development Workflow
+
+- Read `AGENTS.md` before changing code.
+- Use `MEMORY.md` only for durable non-secret project context.
+- Use `CONTEXT.md` only as a short-lived branch-local placeholder.
+- Keep changes small, reviewable, tested, and documented.
+- Treat documentation drift as a bug.
+
+## Documentation Map
+
+- `AGENTS.md`: authoritative agent operating contract.
+- `MEMORY.md`: durable non-secret project context.
+- `CONTEXT.md`: temporary branch handoff placeholder.
+- `docs/agent/`: clean-code, review, testing, and language guidance.
+- `docs/adr/template.md`: architecture decision record template.
+- `INSTALL.md`: setup workflow, when generated for this runtime.
+- `DEVELOP.md`: daily development loop.
+- `CREATE-PR.md`: local PR handoff workflow.
+- `DEPLOY.md`: deployment workflow, when generated for this runtime.
+
+## Security And Secrets
+
+Never commit secrets, credentials, private keys, bearer tokens, raw auth files, customer data, huge logs, or local-only environment files. Use safe placeholders such as `<token>`, `<secret>`, `REPLACE_ME`, or committed `.env.example` files.
