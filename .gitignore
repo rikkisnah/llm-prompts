@@ -10,3 +10,35 @@ corpus/
 # IDE directories
 .idea/
 .vscode/
+
+# Python / uv
+.venv/
+__pycache__/
+*.py[cod]
+.coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Agent runtime metadata
+.agents/
+.codex/
+.claude/
+
+# Local downloads
+downloads/
+.env
+.env.local
+.env.production
+.env.development
+*.log
+tmp/
+.temp/
+.cache/
+dist/
+build/
+htmlcov/
+.uv-cache/
+!.env.example
+!.env.sample
+!.env.template

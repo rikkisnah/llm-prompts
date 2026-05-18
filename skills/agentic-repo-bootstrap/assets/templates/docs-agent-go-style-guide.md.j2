@@ -1,0 +1,24 @@
+$DISCLOSURE_MD
+
+# Go Style Guide
+
+## Defaults
+
+- Use Go modules.
+- Keep packages cohesive and names domain-specific.
+- Prefer small interfaces at package boundaries.
+- Return errors with context.
+- Avoid global mutable state.
+
+## Tooling
+
+- Format with `gofmt`.
+- Test with `go test ./...`.
+- Lint with `go vet ./...`.
+- For standard and strict maturity, use `golangci-lint run` when available.
+
+## Error Handling
+
+- Check errors explicitly.
+- Do not ignore errors with `_ =` unless the reason is documented and safe.
+- Keep side effects visible in function names and package placement.

@@ -1,0 +1,39 @@
+$DISCLOSURE_MD
+
+# Deploy
+
+Use this runbook only for deployment-capable runtimes. Deployment is a state-changing operation and requires explicit target confirmation.
+
+## Required Rules
+
+- Resolve and confirm the approved commit.
+- Run local validation before packaging.
+- Package committed files only.
+- Preserve remote runtime state and secrets.
+- Do not delete remote local files unless explicitly instructed.
+- Back up before replacing files.
+- Restart only confirmed services.
+- Run post-deploy health checks.
+- Stop on first failed command.
+- Report validation and health-check results.
+
+## Inputs
+
+```text
+DEPLOY_REF="<branch, tag, or commit>"
+REMOTE_USER="<ssh user>"
+REMOTE_HOST="<host>"
+REMOTE_APP_DIR="<absolute app path>"
+SERVICES_TO_RESTART="<space-separated service names>"
+```
+
+## Flow
+
+```bash
+git status --short
+git rev-parse --verify "$DEPLOY_REF"
+git log -1 --oneline "$DEPLOY_REF"
+make validate
+```
+
+Package only committed files from the approved ref, copy to the remote host, take a timestamped backup, replace app files while preserving runtime state, restart confirmed services, and run health checks.

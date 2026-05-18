@@ -1,0 +1,61 @@
+$DISCLOSURE
+
+SHELL := /bin/bash
+PYTHON ?= python3
+UV ?= uv
+UV_CACHE_DIR ?= .uv-cache
+
+.DEFAULT_GOAL := help
+
+.PHONY: help setup format test test-% lint score score-gate check validate clean clean-env
+
+help:
+	@printf '%s\n' 'Targets:'
+	@printf '  %-14s %s\n' 'setup' 'Install or sync dependencies.'
+	@printf '  %-14s %s\n' 'format' 'Apply safe formatting when configured.'
+	@printf '  %-14s %s\n' 'test' 'Run the test suite.'
+	@printf '  %-14s %s\n' 'test-NAME' 'Run a focused test file or unittest target.'
+	@printf '  %-14s %s\n' 'lint' 'Run syntax/lint checks.'
+	@printf '  %-14s %s\n' 'score' 'Print governance scorecard.'
+	@printf '  %-14s %s\n' 'score-gate' 'Require all scorecard dimensions to be 10/10.'
+	@printf '  %-14s %s\n' 'check' 'Run lint and tests.'
+	@printf '  %-14s %s\n' 'validate' 'Run check and score-gate.'
+	@printf '  %-14s %s\n' 'clean' 'Remove local caches.'
+	@printf '  %-14s %s\n' 'clean-env' 'Remove local env/cache.'
+
+setup:
+	@if [ -f pyproject.toml ] && command -v $(UV) >/dev/null 2>&1; then UV_CACHE_DIR=$(UV_CACHE_DIR) $(UV) sync; else echo 'No uv project detected; setup skipped.'; fi
+
+format:
+	@if [ -f pyproject.toml ] && command -v $(UV) >/dev/null 2>&1 && UV_CACHE_DIR=$(UV_CACHE_DIR) $(UV) run ruff --version >/dev/null 2>&1; then UV_CACHE_DIR=$(UV_CACHE_DIR) $(UV) run ruff format .; \
+	elif [ -f pyproject.toml ] && command -v $(UV) >/dev/null 2>&1 && UV_CACHE_DIR=$(UV_CACHE_DIR) $(UV) run black --version >/dev/null 2>&1; then UV_CACHE_DIR=$(UV_CACHE_DIR) $(UV) run black .; \
+	else echo 'No configured Python formatter found; format skipped.'; fi
+
+test:
+	@if [ -d tests ]; then $(PYTHON) -m unittest discover -s tests -v; else echo 'No tests directory found.'; fi
+
+test-%:
+	@if [ -f "tests/test_$*.py" ]; then $(PYTHON) -m unittest "tests.test_$*"; \
+	elif [ -f "tests/$*.py" ]; then module=$$(printf '%s' "$*" | sed 's#/#.#g; s#\.py$$##'); $(PYTHON) -m unittest "tests.$$module"; \
+	else echo "No test target found for '$*'."; exit 2; fi
+
+lint:
+	@paths="scripts tests"; if [ -d src ]; then paths="src $$paths"; fi; $(PYTHON) -m compileall -q $$paths
+
+score:
+	$(PYTHON) scripts/score_architecture.py
+
+score-gate:
+	$(PYTHON) scripts/score_architecture.py --min-score 10
+
+check: lint test
+
+validate: check score-gate
+
+clean:
+	rm -rf .coverage .pytest_cache .mypy_cache .ruff_cache htmlcov build dist
+	find . -type d -name __pycache__ -prune -exec rm -rf {} +
+	find . -type f -name '*.pyc' -delete
+
+clean-env:
+	rm -rf .venv .uv-cache

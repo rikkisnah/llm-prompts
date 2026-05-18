@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agentic Repo Bootstrap"
+  short_description: "Bootstrap repositories with agent instructions, score gates, workflow docs, and clean-code governance"
+  default_prompt: "Use $agentic-repo-bootstrap to inspect or bootstrap this repository with agentic engineering governance."

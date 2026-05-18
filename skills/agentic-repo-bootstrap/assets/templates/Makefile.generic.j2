@@ -1,0 +1,41 @@
+$DISCLOSURE
+
+SHELL := /bin/bash
+
+.DEFAULT_GOAL := help
+
+.PHONY: help setup format test test-% lint score score-gate check validate clean clean-env
+
+help:
+	@printf '%s\n' 'Targets: setup format test test-NAME lint score score-gate check validate clean clean-env'
+
+setup:
+	@echo 'No generic setup configured.'
+
+format:
+	@echo 'No generic formatter configured.'
+
+test:
+	@if [ -d tests ]; then echo 'Generic profile has tests directory but no runner configured.'; else echo 'No tests configured.'; fi
+
+test-%:
+	@echo "No focused generic test runner configured for '$*'."
+
+lint:
+	@echo 'No generic linter configured.'
+
+score:
+	python3 scripts/score_architecture.py
+
+score-gate:
+	python3 scripts/score_architecture.py --min-score 10
+
+check: lint test
+
+validate: check score-gate
+
+clean:
+	rm -rf tmp .cache dist build
+
+clean-env:
+	@echo 'No generic dependency environment to clean.'

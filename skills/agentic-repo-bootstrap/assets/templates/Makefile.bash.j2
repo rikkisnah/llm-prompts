@@ -1,0 +1,43 @@
+$DISCLOSURE
+
+SHELL := /bin/bash
+
+.DEFAULT_GOAL := help
+
+.PHONY: help setup format test test-% lint score score-gate check validate clean clean-env
+
+help:
+	@printf '%s\n' 'Targets: setup format test test-NAME lint score score-gate check validate clean clean-env'
+
+setup:
+	@command -v bash >/dev/null
+	@command -v shellcheck >/dev/null 2>&1 || echo 'shellcheck missing.'
+	@command -v shfmt >/dev/null 2>&1 || echo 'shfmt missing.'
+
+format:
+	@if command -v shfmt >/dev/null 2>&1; then shfmt -w $$(find . -name '*.sh' -not -path './.git/*'); else echo 'shfmt missing; format skipped.'; fi
+
+test:
+	@if command -v bats >/dev/null 2>&1 && [ -d tests ]; then bats tests; else find . -name '*.sh' -not -path './.git/*' -print0 | xargs -0 -r bash -n; fi
+
+test-%:
+	@if command -v bats >/dev/null 2>&1 && [ -e "tests/$*" ]; then bats "tests/$*"; else bash -n "$*"; fi
+
+lint:
+	@if command -v shellcheck >/dev/null 2>&1; then find . -name '*.sh' -not -path './.git/*' -print0 | xargs -0 -r shellcheck; else echo 'shellcheck missing.'; exit 1; fi
+
+score:
+	python3 scripts/score_architecture.py
+
+score-gate:
+	python3 scripts/score_architecture.py --min-score 10
+
+check: lint test
+
+validate: check score-gate
+
+clean:
+	rm -rf tmp .cache dist build
+
+clean-env:
+	@echo 'No Bash dependency environment to clean.'

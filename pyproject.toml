@@ -1,0 +1,11 @@
+#ai-assisted with OCA/OpenAI Model with human supervision
+
+[project]
+name = "llm-prompts"
+version = "0.1.0"
+description = "Prompts and reusable Codex/Claude skills, plus a CLI to sync them into ~/.claude/skills and ~/.codex/skills."
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

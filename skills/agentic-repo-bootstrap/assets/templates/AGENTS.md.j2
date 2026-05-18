@@ -1,10 +1,10 @@
-<!-- #ai-assisted with OCA/OpenAI Model with human supervision -->
+$DISCLOSURE_MD
 
 # Agent Operating Contract
 
-Maturity: standard
-Runtime: library
-Language profile: python
+Maturity: $MATURITY
+Runtime: $RUNTIME_TYPE
+Language profile: $LANGUAGE
 
 `AGENTS.md` is the source of truth for agent instructions. CLAUDE.md must be a symlink to AGENTS.md in any directory that carries agent instructions.
 
@@ -13,7 +13,7 @@ Detailed guidance lives in:
 - `docs/agent/clean-code-guide.md`
 - `docs/agent/review-guide.md`
 - `docs/agent/testing-guide.md`
-- `docs/agent/python-style-guide.md`
+- `$LANGUAGE_STYLE_GUIDE`
 
 ## Project Context
 
@@ -64,7 +64,7 @@ Follow `docs/agent/clean-code-guide.md` for detailed rules. These rules are mand
 
 ## Language Standards
 
-Use the `python` profile in `docs/agent/python-style-guide.md`. Prefer configured project tooling over generic defaults.
+Use the `$LANGUAGE` profile in `$LANGUAGE_STYLE_GUIDE`. Prefer configured project tooling over generic defaults.
 
 ## Modes Of Operation
 
@@ -99,35 +99,3 @@ Never write secrets, tokens, credentials, private keys, wallet files, bearer hea
 - Scorecard dimensions remain at the required threshold.
 - Docs and workflow files match behavior.
 - No secrets or local-only artifacts are committed.
-
-## Repository Shape
-
-This repo carries three classes of content:
-
-- **Prompts** (`prompts/`) — paste-into-chat Markdown files. UPPER-KEBAB-CASE filenames. Optional YAML frontmatter with `tags`.
-- **Skills** (`skills/`) — installable Claude Code / Codex CLI skills. Each is a directory with a `SKILL.md` manifest (`name:` + `description:` frontmatter). Optional `prompts/`, `references/`, `scripts/`, `assets/` subdirectories. Lowercase-kebab-case directory names.
-- **`skills_manager` CLI** (`src/skills_manager/`) — stdlib-only Python CLI that installs `skills/` into `~/.claude/skills` and `~/.codex/skills` via `make sync`.
-
-The `skills_manager` test in `tests/test_cli.py` requires `PYTHONPATH=src` (already set in the Makefile's `test` and `test-NAME` targets).
-
-## Prompt And Skill Authoring
-
-- Prompt filenames are UPPER-KEBAB-CASE (`CREATE-PR.md`, `RUNBOOK-AUTHOR.md`). Other Markdown files (READMEs, docs) stay lowercase kebab-case.
-- Skill directory names are lowercase-kebab-case (`create-pr/`, `agentic-repo-bootstrap/`).
-- A skill's `description` is the trigger string. Make it specific — describe the exact request types that should fire it.
-- Keep individual `SKILL.md` files under ~200 lines. Push long content into `prompts/` or `references/` and reference it from the workflow section.
-- Do not embed secrets, internal hostnames, OCIDs, or environment-specific values in skills, prompts, or examples.
-- Skill bundled scripts in `skills/<name>/scripts/` are *transported content* — they ride along when a skill is installed elsewhere. They are part of the skill's contract, not this repo's primary source.
-- See `skills/skill-authoring/` for the meta-skill that scaffolds new skills.
-
-## Skill Sync Workflow
-
-- `make sync` — install `skills/` into `~/.claude/skills` and `~/.codex/skills`.
-- `make list` — show source skills and what's installed for each tool.
-- `make dry-run-delete SKILL=<name>` — preview removing a skill from the installed locations.
-- Underlying CLI accepts `--target claude|codex|both` to limit an operation to one tool.
-
-## Cross-Machine Sync
-
-- `./getall.sh` — pull latest, auto-stash local edits.
-- `./saveall.sh` — stage, timestamped commit, rebase, push. Used for quick multi-machine sync only. For collaborative review, use the `create-pr` skill or `prompts/CREATE-PR.md`.

@@ -1,0 +1,24 @@
+$DISCLOSURE_MD
+
+# Bash Style Guide
+
+## Defaults
+
+- Use `#!/usr/bin/env bash`.
+- Use `set -euo pipefail` unless a script documents why it cannot.
+- Quote variables by default.
+- Use `readonly` for constants.
+- Use `local` inside functions.
+- Validate required inputs early.
+
+## Tooling
+
+- Format with `shfmt`.
+- Lint with `shellcheck`.
+- Test with `bats` when present, otherwise run `bash -n` over scripts.
+
+## Safety
+
+- Make destructive operations obvious and guarded.
+- Prefer explicit conditionals over dense Bash tricks.
+- Keep parsing, validation, business logic, and output separate.
