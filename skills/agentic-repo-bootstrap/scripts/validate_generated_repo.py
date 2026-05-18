@@ -58,7 +58,7 @@ def validate_repo(repo: Path, *, run_score: bool = False) -> list[ValidationResu
         validate_agents_line_count(repo),
     ]
     if run_score:
-        results.append(validate_score_command(repo))
+        results.append(run_score_command(repo))
     return results
 
 
@@ -89,8 +89,8 @@ def validate_agents_line_count(repo: Path) -> ValidationResult:
     return ValidationResult("AGENTS.md line count", line_count < 200, f"{line_count} lines")
 
 
-def validate_score_command(repo: Path) -> ValidationResult:
-    """Run the generated score gate."""
+def run_score_command(repo: Path) -> ValidationResult:
+    """Execute the generated score gate as a subprocess and return the result."""
 
     result = subprocess.run(
         ["python3", "scripts/score_architecture.py", "--min-score", "10"],

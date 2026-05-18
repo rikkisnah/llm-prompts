@@ -45,7 +45,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def run(argv: list[str], stdout: TextIO, stderr: TextIO) -> int:
-    parser = build_parser()
+    parser = build_cli_parser()
     namespace = parser.parse_args(argv)
 
     try:
@@ -56,34 +56,42 @@ def run(argv: list[str], stdout: TextIO, stderr: TextIO) -> int:
         return 2
 
 
-def build_parser() -> argparse.ArgumentParser:
+def build_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="skills-manager",
         description="Sync, list, or remove shared Codex and Claude skills.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""Examples:
-  skills-manager --home --skills ./general-skills --skills ./cpv-skills
-  skills-manager list --home
-  skills-manager remove cpv-ops --home
-  skills-manager delete cpv-ops --target codex --dry-run
-""",
+        epilog=_cli_epilog(),
     )
+    _add_command_arguments(parser)
+    _add_target_arguments(parser)
+    _add_removal_arguments(parser)
+    _add_mirror_arguments(parser)
+    return parser
+
+
+def _cli_epilog() -> str:
+    return (
+        "Examples:\n"
+        "  skills-manager --home --skills ./skills\n"
+        "  skills-manager list --home\n"
+        "  skills-manager remove my-skill --home\n"
+        "  skills-manager delete my-skill --target codex --dry-run\n"
+    )
+
+
+def _add_command_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "command",
         nargs="?",
         help="sync, list, ls, remove, rm, or delete. Defaults to sync.",
     )
     parser.add_argument("skill_name", nargs="?", help="Skill name for remove/delete.")
-    parser.add_argument(
-        "--root",
-        type=Path,
-        help="Directory that should receive .claude/ and .codex/.",
-    )
-    parser.add_argument(
-        "--home",
-        action="store_true",
-        help="Use the current user's home directory as --root.",
-    )
+
+
+def _add_target_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--root", type=Path, help="Directory that should receive .claude/ and .codex/.")
+    parser.add_argument("--home", action="store_true", help="Use the current user's home directory as --root.")
     parser.add_argument(
         "--skills",
         type=Path,
@@ -97,6 +105,9 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_TARGET_FILTER,
         help="Operate on both tools or only one tool.",
     )
+
+
+def _add_removal_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--from-source",
         action="store_true",
@@ -107,6 +118,9 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Show destructive operations without deleting anything.",
     )
+
+
+def _add_mirror_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--mirror",
         action="append",
@@ -118,7 +132,6 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Exit non-zero if any --mirror sync fails.",
     )
-    return parser
 
 
 def build_runtime_config(namespace: argparse.Namespace) -> RuntimeConfig:
@@ -128,7 +141,7 @@ def build_runtime_config(namespace: argparse.Namespace) -> RuntimeConfig:
 
     if action == "sync" and not skills_dirs:
         raise SkillSyncError(
-            "Skills directory not found. Provide --skills or create general-skills/ or cpv-skills/."
+            "Skills directory not found. Provide --skills or create a skills/ directory."
         )
 
     if namespace.from_source and not skills_dirs:
